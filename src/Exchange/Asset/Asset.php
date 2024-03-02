@@ -2,6 +2,7 @@
 
 namespace Modules\Exchange\Asset;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Money\Money;
@@ -16,6 +17,11 @@ class Asset extends Model
     public function prices(): HasMany
     {
         return $this->hasMany(AssetPrice::class);
+    }
+
+    public function scopeCrypto(Builder $query): void
+    {
+        $query->where('type', AssetType::Crypto);
     }
 
     public function updateCurrentPrice(Money $money): void
