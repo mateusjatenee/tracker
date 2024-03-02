@@ -22,10 +22,7 @@ class Asset extends Model
     {
         $this->getConnection()->transaction(function () use ($money) {
             $this->update(['current_price' => $money]);
-            $this->prices()->save(new AssetPrice([
-                'currency' => $this->currency,
-                'price' => $money,
-            ]));
+            AssetPrice::track($this);
         });
     }
 }

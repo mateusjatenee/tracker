@@ -15,4 +15,13 @@ class AssetPrice extends Model
     {
         return $this->belongsTo(Asset::class);
     }
+
+    public static function track(Asset $asset): void
+    {
+        self::create([
+            'currency' => $asset->currency,
+            'price' => $asset->current_price,
+            'asset_id' => $asset->id,
+        ]);
+    }
 }
