@@ -33,6 +33,6 @@ class AssetTest extends TestCase
         );
 
         $this->assertEquals('2000', $asset->fresh()->current_price->getAmount());
-        //        $this->assertEquals('2000', $asset->prices()->latest('id')->first()->price->getAmount());
+        $this->assertEquals('2000', $asset->prices()->latest('id')->first()->price->getAmount());
     }
 }
