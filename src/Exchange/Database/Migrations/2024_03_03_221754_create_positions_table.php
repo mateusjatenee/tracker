@@ -8,23 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->decimal('quantity');
-            $table->string('type');
-            $table->unsignedInteger('market_price_per_unit');
-            $table->unsignedInteger('amount_paid');
+            $table->decimal('quantity', 19, 4);
+            $table->unsignedInteger('average_price');
+            $table->unsignedInteger('current_market_price');
+            $table->integer('profit');
             $table->string('currency');
-            $table->dateTime('performed_at');
+            $table->dateTime('calculated_at');
             $table->foreignId('asset_id');
             $table->foreignId('account_id');
             $table->timestamps();
-            $table->index(['account_id', 'performed_at']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('positions');
     }
 };

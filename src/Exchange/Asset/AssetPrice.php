@@ -4,6 +4,7 @@ namespace Modules\Exchange\Asset;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Exchange\MoneyCast;
 
 class AssetPrice extends Model
 {

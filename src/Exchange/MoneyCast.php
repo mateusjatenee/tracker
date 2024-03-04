@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Exchange\Asset;
+namespace Modules\Exchange;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;

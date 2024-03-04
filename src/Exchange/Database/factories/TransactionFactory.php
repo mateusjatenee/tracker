@@ -4,7 +4,7 @@ namespace Modules\Exchange\database\factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
-use Modules\Exchange\Models\Transaction;
+use Modules\Exchange\Portfolio\Transaction;
 use Modules\Exchange\Portfolio\TransactionType;
 
 class TransactionFactory extends Factory

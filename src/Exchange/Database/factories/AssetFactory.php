@@ -21,6 +21,13 @@ class AssetFactory extends Factory
         ];
     }
 
+    public function stock(): static
+    {
+        return $this->state([
+            'type' => AssetType::Stock,
+        ]);
+    }
+
     public function crypto(): static
     {
         return $this->state([
