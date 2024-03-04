@@ -64,7 +64,7 @@ class Account extends Model
         );
     }
 
-    private function fetchPositionForAsset(Asset $asset): Position
+    public function fetchPositionForAsset(Asset $asset): Position
     {
         return $this->positions()->firstOrCreate([
             'asset_id' => $asset->id,

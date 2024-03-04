@@ -38,4 +38,21 @@ class AccountTest extends TestCase
         $this->assertEquals(2, $account->transactions()->count());
         $this->assertEquals(1, $account->positions()->count());
     }
+
+    #[Test]
+    public function it_finds_or_creates_a_position_for_a_given_asset(): void
+    {
+        $asset = AssetFactory::new()->stock()->create();
+        $account = AccountFactory::new()->stock()->create();
+
+        $this->assertEquals(0, $account->positions()->count());
+
+        $position = $account->fetchPositionForAsset($asset);
+
+        $this->assertEquals(1, $account->positions()->count());
+        $this->assertEquals($position->id, $position->id);
+
+        $account->fetchPositionForAsset($asset);
+        $this->assertEquals(1, $account->positions()->count());
+    }
 }
