@@ -24,7 +24,7 @@ class AccountTest extends TestCase
         $account->buy(
             asset: $asset,
             quantity: 10,
-            totalPaid: Money::USD(500),
+            amountPaidPerUnit: 5.0,
         );
 
         $this->assertEquals(1, $account->transactions()->count());
@@ -32,7 +32,7 @@ class AccountTest extends TestCase
         $account->sell(
             asset: $asset,
             quantity: 5,
-            totalPaid: Money::USD(1500),
+            amountPaidPerUnit: 15.0,
         );
 
         $this->assertEquals(2, $account->transactions()->count());

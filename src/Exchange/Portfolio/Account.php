@@ -31,35 +31,35 @@ class Account extends Model
         return $this->hasManyThrough(Transaction::class, Position::class);
     }
 
-    public function addTransaction(TransactionType $type, Asset $asset, Money $totalPaid, int $quantity): void
+    public function addTransaction(TransactionType $type, Asset $asset, float $amountPaidPerUnit, int $quantity): void
     {
         $position = $this->fetchPositionForAsset($asset);
 
         Transaction::register(
             $type,
-            $totalPaid,
+            $amountPaidPerUnit,
             $quantity,
             $position,
         );
     }
 
     // TODO: It might be better to just always use the price per unit and then calculate the totals @ runtime...
-    public function buy(Asset $asset, int $quantity, Money $totalPaid): void
+    public function buy(Asset $asset, int $quantity, float $amountPaidPerUnit): void
     {
         $this->addTransaction(
             TransactionType::Buy,
             $asset,
-            $totalPaid,
+            $amountPaidPerUnit,
             $quantity
         );
     }
 
-    public function sell(Asset $asset, int $quantity, Money $totalPaid): void
+    public function sell(Asset $asset, int $quantity, float $amountPaidPerUnit): void
     {
         $this->addTransaction(
             TransactionType::Sell,
             $asset,
-            $totalPaid,
+            $amountPaidPerUnit,
             $quantity
         );
     }

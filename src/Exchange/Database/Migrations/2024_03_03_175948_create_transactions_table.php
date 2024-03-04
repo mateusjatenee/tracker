@@ -13,7 +13,7 @@ return new class extends Migration
             $table->decimal('quantity');
             $table->string('type');
             $table->unsignedInteger('market_price_per_unit');
-            $table->unsignedInteger('amount_paid');
+            $table->decimal('amount_paid_per_unit', 19, 4);
             $table->string('currency');
             $table->dateTime('performed_at');
             $table->foreignId('asset_id');

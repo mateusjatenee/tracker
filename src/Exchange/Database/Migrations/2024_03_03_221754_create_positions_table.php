@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('asset_id');
             $table->foreignId('account_id');
             $table->index(['account_id', 'asset_id']);
+            $table->unique(['account_id', 'asset_id']);
             $table->timestamps();
         });
     }

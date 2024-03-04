@@ -34,7 +34,7 @@ class Transaction extends Model
 
     public static function register(
         TransactionType $type,
-        Money $totalPaid,
+        float $amountPaidPerUnit,
         int $quantity,
         Position $position,
     ): Transaction {
@@ -42,7 +42,7 @@ class Transaction extends Model
             'quantity' => $quantity,
             'type' => $type,
             'market_price_per_unit' => $position->asset->current_price,
-            'amount_paid' => $totalPaid,
+            'amount_paid_per_unit' => $amountPaidPerUnit,
             'performed_at' => now(),
             'position_id' => $position->id,
             'asset_id' => $position->asset_id,

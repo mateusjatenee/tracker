@@ -13,7 +13,8 @@ class PositionFactory extends Factory
     public function definition(): array
     {
         return [
-            'currency' => $this->faker->word(),
+            'account_id' => AccountFactory::new()->stock(),
+            'asset_id' => AssetFactory::new(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

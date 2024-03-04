@@ -10,6 +10,10 @@ use Modules\Exchange\Asset\Asset;
 
 class Position extends Model
 {
+    protected $with = [
+        'details',
+    ];
+
     public function asset(): BelongsTo
     {
         return $this->belongsTo(Asset::class);
