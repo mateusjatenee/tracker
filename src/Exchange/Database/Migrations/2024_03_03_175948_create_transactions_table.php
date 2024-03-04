@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('currency');
             $table->dateTime('performed_at');
             $table->foreignId('asset_id');
-            $table->foreignId('account_id');
+            $table->foreignId('position_id');
             $table->timestamps();
-            $table->index(['account_id', 'performed_at']);
+            $table->index(['position_id', 'performed_at']);
         });
     }
 

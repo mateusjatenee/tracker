@@ -27,23 +27,26 @@ class Transaction extends Model
         return $this->belongsTo(Asset::class);
     }
 
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(Position::class);
+    }
+
     public static function register(
         TransactionType $type,
-        Asset $asset,
         Money $totalPaid,
         int $quantity,
-        Account $account,
-    ): Transaction
-    {
+        Position $position,
+    ): Transaction {
         return self::create([
             'quantity' => $quantity,
             'type' => $type,
-            'market_price_per_unit' => $asset->current_price,
+            'market_price_per_unit' => $position->asset->current_price,
             'amount_paid' => $totalPaid,
             'performed_at' => now(),
-            'account_id' => $account->id,
-            'asset_id' => $asset->id,
-            'currency' => $asset->currency,
+            'position_id' => $position->id,
+            'asset_id' => $position->asset_id,
+            'currency' => $position->asset->currency,
         ]);
     }
 

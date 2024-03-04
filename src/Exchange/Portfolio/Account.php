@@ -3,13 +3,11 @@
 namespace Modules\Exchange\Portfolio;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Exchange\Asset\Asset;
-use Modules\Exchange\MoneyCast;
 use Money\Money;
 
 class Account extends Model
@@ -23,19 +21,25 @@ class Account extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function transactions(): HasMany
+    public function positions(): HasMany
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Position::class);
+    }
+
+    public function transactions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Transaction::class, Position::class);
     }
 
     public function addTransaction(TransactionType $type, Asset $asset, Money $totalPaid, int $quantity): void
     {
+        $position = $this->fetchPositionForAsset($asset);
+
         Transaction::register(
             $type,
-            $asset,
             $totalPaid,
             $quantity,
-            $this,
+            $position,
         );
     }
 
@@ -58,5 +62,12 @@ class Account extends Model
             $totalPaid,
             $quantity
         );
+    }
+
+    private function fetchPositionForAsset(Asset $asset): Position
+    {
+        return $this->positions()->firstOrCreate([
+            'asset_id' => $asset->id,
+        ]);
     }
 }

@@ -36,5 +36,6 @@ class AccountTest extends TestCase
         );
 
         $this->assertEquals(2, $account->transactions()->count());
+        $this->assertEquals(1, $account->positions()->count());
     }
 }
