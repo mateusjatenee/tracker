@@ -36,16 +36,16 @@ final readonly class Quantity implements DecimalValue
         return $this->value->toFloat();
     }
 
-    public function subtract(DecimalValue|float $quantity): Quantity
+    public function subtract(Quantity|float $quantity): Quantity
     {
-        $amount = $quantity instanceof DecimalValue ? $quantity->toFloat() : $quantity;
+        $amount = $quantity instanceof self ? $quantity->toFloat() : $quantity;
 
         return new self($this->value->minus($amount));
     }
 
-    public function multiply(DecimalValue|float $quantity): Quantity
+    public function multiply(Quantity|float $quantity): Quantity
     {
-        $amount = $quantity instanceof DecimalValue ? $quantity->toFloat() : $quantity;
+        $amount = $quantity instanceof self ? $quantity->toFloat() : $quantity;
 
         return new self($this->value->multipliedBy($amount));
     }
