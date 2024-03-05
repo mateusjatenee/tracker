@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('positions', function (Blueprint $table) {
             $table->id();
-            $table->string('ticker');
-            $table->decimal('current_price', 19, 8);
-            $table->string('type');
-            $table->string('currency');
+            $table->foreignId('asset_id');
+            $table->foreignId('account_id');
+            $table->index(['account_id', 'asset_id']);
+            $table->unique(['account_id', 'asset_id']);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('assets');
+        Schema::dropIfExists('positions');
     }
 };

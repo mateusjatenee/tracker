@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('asset_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('asset_id')->index();
-            $table->unsignedInteger('price');
+            $table->decimal('price', 19, 8);
             $table->string('currency');
             $table->timestamps();
         });

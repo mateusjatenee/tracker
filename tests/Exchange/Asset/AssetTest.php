@@ -6,7 +6,7 @@ namespace Tests\Exchange\Asset;
 
 use Modules\Exchange\Asset\Asset;
 use Modules\Exchange\database\factories\AssetFactory;
-use Money\Money;
+use Modules\Exchange\Money;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -16,12 +16,12 @@ class AssetTest extends TestCase
     public function it_casts_the_current_price_to_a_money_object(): void
     {
         $asset = new Asset([
-            'current_price' => Money::USD(1000),
+            'current_price' => Money::USD(10),
             'currency' => 'USD',
         ]);
 
         $this->assertInstanceOf(Money::class, $asset->current_price);
-        $this->assertEquals('1000', $asset->current_price->getAmount());
+        $this->assertEquals(10.0, $asset->current_price->toFloat());
     }
 
     #[Test]
@@ -29,10 +29,10 @@ class AssetTest extends TestCase
     {
         $asset = AssetFactory::new()->create();
         $asset->updateCurrentPrice(
-            Money::USD(2000),
+            Money::USD(20),
         );
 
-        $this->assertEquals('2000', $asset->fresh()->current_price->getAmount());
-        $this->assertEquals('2000', $asset->prices()->latest('id')->first()->price->getAmount());
+        $this->assertEquals(20.0, $asset->fresh()->current_price->toFloat());
+        $this->assertEquals(20.0, $asset->prices()->latest('id')->first()->price->toFloat());
     }
 }

@@ -2,26 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Modules\Exchange\Asset;
+namespace Modules\Exchange;
 
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
-use Money\Currency;
-use Money\Money;
 
 class MoneyCast implements CastsAttributes
 {
     public function get(Model $model, string $key, mixed $value, array $attributes): Money
     {
-        return new Money($value, new Currency($attributes['currency']));
+        return new Money($value);
     }
 
-    public function set(Model $model, string $key, mixed $value, array $attributes): int
+    public function set(Model $model, string $key, mixed $value, array $attributes): string
     {
         if (! $value instanceof Money) {
-            throw new \Exception('Price must be an instance of Money.');
+            throw new \Exception($key.' must be an instance of '.Money::class);
         }
 
-        return (int) $value->getAmount();
+        return (string) $value;
     }
 }
