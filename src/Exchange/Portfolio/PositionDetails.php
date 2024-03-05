@@ -18,4 +18,21 @@ class PositionDetails extends Model
     {
         return $this->belongsTo(Position::class);
     }
+
+    public static function calculate(Position $position): void
+    {
+        $profit = (
+            $position->asset->current_price->getAmount() / 100 - $position->transactions->avg('amount_paid_per_unit')
+        ) * $position->transactions->sum('quantity');
+
+        self::create([
+            'quantity' => $position->transactions->sum('quantity'),
+            'average_price' => $position->transactions->avg('amount_paid_per_unit'),
+            'current_market_price' => $position->asset->current_price->getAmount() / 100,
+            'profit' => $profit,
+            'currency' => $position->asset->currency,
+            'calculated_at' => now(),
+            'position_id' => $position->id,
+        ]);
+    }
 }

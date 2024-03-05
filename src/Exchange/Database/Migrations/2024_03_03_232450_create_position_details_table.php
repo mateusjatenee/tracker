@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('position_details', function (Blueprint $table) {
             $table->id();
             $table->decimal('quantity');
-            $table->unsignedInteger('average_price');
-            $table->unsignedInteger('current_market_price');
+            $table->decimal('average_price', 19, 4);
+            $table->decimal('current_market_price', 19, 4);
             $table->integer('profit');
             $table->string('currency');
             $table->dateTime('calculated_at');
