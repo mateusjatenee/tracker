@@ -83,12 +83,12 @@ class Position extends Model
 
     public function totalInvested(): Money
     {
-        return Money::USD(($this->currentQuantity()->toFloat() * $this->averagePrice()->toFloat()));
+        return $this->averagePrice()->multiply($this->currentQuantity());
     }
 
     public function marketValue(): Money
     {
-        return $this->asset->current_price->multiply($this->currentQuantity()->toFloat());
+        return $this->asset->current_price->multiply($this->currentQuantity());
     }
 }
 
