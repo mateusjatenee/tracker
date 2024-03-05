@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Modules\Exchange;
 
-readonly class Money
+use Brick\Math\BigDecimal;
+
+final readonly class Money
 {
-    public const PRECISION = 100000000;
+    public const SCALE = 8;
 
-    protected int $value;
+    protected BigDecimal $value;
 
-    public function __construct(float|int|string $value)
+    public function __construct(BigDecimal|float|int|string $value)
     {
-        if (! is_numeric($value)) {
+        if (! is_numeric($value) && ! $value instanceof BigDecimal) {
             throw new \InvalidArgumentException('Value must be numeric');
         }
 
@@ -26,39 +28,30 @@ readonly class Money
 
     public function asFloat(): float
     {
-        return $this->backToBaseUnit();
-    }
-
-    public function backToBaseUnit(): float
-    {
-        return $this->value / self::PRECISION;
+        return $this->value->toFloat();
     }
 
     public function subtract(Money|float $money): Money
     {
-        if ($money instanceof self) {
-            return new self($this->backToBaseUnit() - $money->backToBaseUnit());
-        }
+        $amount = $money instanceof self ? $money->asFloat() : $money;
 
-        return new self($this->backToBaseUnit() - $money);
+        return new self($this->value->minus($amount));
     }
 
     public function multiply(Money|float $money): Money
     {
-        if ($money instanceof self) {
-            return new self($this->backToBaseUnit() * $money->backToBaseUnit());
-        }
+        $amount = $money instanceof self ? $money->asFloat() : $money;
 
-        return new self($this->backToBaseUnit() * $money);
+        return new self($this->value->multipliedBy($amount));
     }
-    
+
     public function __toString(): string
     {
-        return (string) $this->backToBaseUnit();
+        return (string) $this->value;
     }
 
-    private function normalizeValue(float|int|string $value): int
+    private function normalizeValue(BigDecimal|float|int|string $value): BigDecimal
     {
-        return (int) ($value * self::PRECISION);
+        return BigDecimal::of($value)->toScale(self::SCALE);
     }
 }

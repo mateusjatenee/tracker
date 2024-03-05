@@ -4,15 +4,24 @@ declare(strict_types=1);
 
 namespace Modules\Exchange;
 
-readonly class Quantity
+use Brick\Math\BigDecimal;
+
+final readonly class Quantity
 {
-    public const PRECISION = 100000000;
+    public const SCALE = 8;
 
-    public int $value;
+    protected BigDecimal $value;
 
-    public function __construct(float|int|string $value)
+    /**
+     * A Quantity VO receives a decimal value and normalizes it to a BigDecimal object.
+     * This is needed because Crypto currencies can be negotiated in tiny quantities, such as
+     * 0.00000001 BTC, and we need to ensure that the precision is kept. Stocks are simpler.
+     *
+     * @param  \Brick\Math\BigDecimal|float|int|string  $value
+     */
+    public function __construct(BigDecimal|float|int|string $value)
     {
-        if (! is_numeric($value)) {
+        if (! is_numeric($value) && ! $value instanceof BigDecimal) {
             throw new \InvalidArgumentException('Value must be numeric');
         }
 
@@ -26,21 +35,30 @@ readonly class Quantity
 
     public function asFloat(): float
     {
-        return $this->backToBaseUnit();
+        return $this->value->toFloat();
     }
 
-    public function backToBaseUnit(): float
+    public function subtract(Quantity|float $quantity):Quantity
     {
-        return $this->value / self::PRECISION;
+        $amount = $quantity instanceof self ? $quantity->asFloat() : $quantity;
+
+        return new self($this->value->minus($amount));
+    }
+
+    public function multiply(Quantity|float $quantity):Quantity
+    {
+        $amount = $quantity instanceof self ? $quantity->asFloat() : $quantity;
+
+        return new self($this->value->multipliedBy($amount));
     }
 
     public function __toString(): string
     {
-        return (string) $this->backToBaseUnit();
+        return (string) $this->value;
     }
 
-    private function normalizeValue(float|int|string $value): int
+    private function normalizeValue(BigDecimal|float|int|string $value): BigDecimal
     {
-        return (int) ($value * self::PRECISION);
+        return BigDecimal::of($value)->toScale(self::SCALE);
     }
 }
