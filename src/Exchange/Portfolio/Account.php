@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Exchange\Asset\Asset;
-use Money\Money;
+use Modules\Exchange\Quantity;
+use Modules\Exchange\Money;
 
 class Account extends Model
 {
@@ -31,7 +32,7 @@ class Account extends Model
         return $this->hasManyThrough(Transaction::class, Position::class);
     }
 
-    public function addTransaction(TransactionType $type, Asset $asset, float $amountPaidPerUnit, int $quantity): void
+    public function addTransaction(TransactionType $type, Asset $asset, Money $amountPaidPerUnit, Quantity $quantity): void
     {
         $position = $this->fetchPositionForAsset($asset);
 
@@ -44,7 +45,7 @@ class Account extends Model
     }
 
     // TODO: It might be better to just always use the price per unit and then calculate the totals @ runtime...
-    public function buy(Asset $asset, int $quantity, float $amountPaidPerUnit): void
+    public function buy(Asset $asset, Quantity $quantity, Money $amountPaidPerUnit): void
     {
         $this->addTransaction(
             TransactionType::Buy,
@@ -54,7 +55,7 @@ class Account extends Model
         );
     }
 
-    public function sell(Asset $asset, int $quantity, float $amountPaidPerUnit): void
+    public function sell(Asset $asset, Quantity $quantity, Money $amountPaidPerUnit): void
     {
         $this->addTransaction(
             TransactionType::Sell,

@@ -5,7 +5,8 @@ namespace Tests\Exchange\Portfolio;
 use Event;
 use Modules\Exchange\database\factories\AccountFactory;
 use Modules\Exchange\database\factories\AssetFactory;
-use Money\Money;
+use Modules\Exchange\Money;
+use Modules\Exchange\Quantity;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -23,16 +24,16 @@ class AccountTest extends TestCase
 
         $account->buy(
             asset: $asset,
-            quantity: 10,
-            amountPaidPerUnit: 5.0,
+            quantity: Quantity::make(10),
+            amountPaidPerUnit: Money::USD(5.0),
         );
 
         $this->assertEquals(1, $account->transactions()->count());
 
         $account->sell(
             asset: $asset,
-            quantity: 5,
-            amountPaidPerUnit: 15.0,
+            quantity: Quantity::make(5),
+            amountPaidPerUnit: Money::USD(15.0),
         );
 
         $this->assertEquals(2, $account->transactions()->count());

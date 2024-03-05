@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->decimal('quantity');
+            $table->decimal('quantity', 19, 8);
             $table->string('type');
-            $table->decimal('market_price_per_unit', 19, 4);
-            $table->decimal('amount_paid_per_unit', 19, 4);
+            $table->decimal('market_price_per_unit', 19, 8);
+            $table->decimal('amount_paid_per_unit', 19, 8);
             $table->string('currency');
             $table->dateTime('performed_at');
             $table->foreignId('asset_id');

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->string('ticker');
-            $table->integer('current_price');
+            $table->decimal('current_price', 19, 8);
             $table->string('type');
             $table->string('currency');
             $table->timestamps();

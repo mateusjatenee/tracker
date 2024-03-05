@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Exchange\Asset\Asset;
-use Money\Money;
+use Modules\Exchange\Money;
+use Modules\Exchange\Quantity;
 
 class Position extends Model
 {
@@ -40,7 +41,7 @@ class Position extends Model
         return $this->hasOne(PositionDetails::class)->latestOfMany();
     }
 
-    public function addTransaction(int $quantity, float $amountPaidPerUnit, TransactionType $type): Transaction
+    public function addTransaction(Quantity $quantity, Money $amountPaidPerUnit, TransactionType $type): Transaction
     {
         $transaction = Transaction::register(
             $type,
@@ -54,12 +55,12 @@ class Position extends Model
         return $transaction;
     }
 
-    public function buy(int $quantity, float $amountPaidPerUnit): Transaction
+    public function buy(Quantity $quantity, Money $amountPaidPerUnit): Transaction
     {
         return $this->addTransaction($quantity, $amountPaidPerUnit, TransactionType::Buy);
     }
 
-    public function sell(int $quantity, float $amountPaidPerUnit): Transaction
+    public function sell(Quantity $quantity, Money $amountPaidPerUnit): Transaction
     {
         return $this->addTransaction($quantity, $amountPaidPerUnit, TransactionType::Sell);
     }
@@ -68,7 +69,7 @@ class Position extends Model
     {
         return $this->transactions->filter(
             fn (Transaction $transaction) => $transaction->isBuy()
-        )->avg('amount_paid_per_unit');
+        )->avg(fn (Transaction $t) => $t->amount_paid_per_unit->asFloat());
     }
 
     public function currentQuantity(): int

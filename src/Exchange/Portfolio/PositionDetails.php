@@ -5,6 +5,10 @@ namespace Modules\Exchange\Portfolio;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Exchange\Money;
+use Modules\Exchange\MoneyCast;
+use Modules\Exchange\Quantity;
+use Modules\Exchange\QuantityCast;
 
 class PositionDetails extends Model
 {
@@ -12,6 +16,9 @@ class PositionDetails extends Model
 
     protected $casts = [
         'calculated_at' => 'datetime',
+        'quantity' => QuantityCast::class,
+        'average_price' => MoneyCast::class,
+        'current_market_price' => MoneyCast::class,
     ];
 
     public function position(): BelongsTo
@@ -22,13 +29,16 @@ class PositionDetails extends Model
     public static function calculate(Position $position): void
     {
         $profit = (
-            $position->asset->current_price->getAmount() / 100 - $position->transactions->avg('amount_paid_per_unit')
-        ) * $position->transactions->sum('quantity');
+            $position->asset->current_price->subtract(
+                $position->transactions->avg(fn (Transaction $t) => $t->amount_paid_per_unit->asFloat())
+            )
+        )->asFloat() * $position->transactions->sum(fn (Transaction $t) => $t->quantity->asFloat());
+
 
         self::create([
-            'quantity' => $position->transactions->sum('quantity'),
-            'average_price' => $position->transactions->avg('amount_paid_per_unit'),
-            'current_market_price' => $position->asset->current_price->getAmount() / 100,
+            'quantity' => Quantity::make($position->transactions->sum(fn (Transaction $t) => $t->quantity->asFloat())),
+            'average_price' => Money::USD($position->transactions->avg(fn (Transaction $t) => $t->amount_paid_per_unit->asFloat())),
+            'current_market_price' => $position->asset->current_price,
             'profit' => $profit,
             'currency' => $position->asset->currency,
             'calculated_at' => now(),

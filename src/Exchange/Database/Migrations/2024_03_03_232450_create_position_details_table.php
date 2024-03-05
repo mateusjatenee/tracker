@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('position_details', function (Blueprint $table) {
             $table->id();
-            $table->decimal('quantity');
-            $table->decimal('average_price', 19, 4);
-            $table->decimal('current_market_price', 19, 4);
-            $table->integer('profit');
+            $table->decimal('quantity', 18, 8);
+            $table->decimal('average_price', 19, 8);
+            $table->decimal('current_market_price', 19, 8);
+            $table->decimal('profit', 19, 4);
             $table->string('currency');
             $table->dateTime('calculated_at');
             $table->foreignId('position_id')->index();

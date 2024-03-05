@@ -5,17 +5,20 @@ namespace Modules\Exchange\Portfolio;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Exchange\Asset\Asset;
+use Modules\Exchange\Money;
 use Modules\Exchange\MoneyCast;
+use Modules\Exchange\Quantity;
+use Modules\Exchange\QuantityCast;
 use Money\Currency;
-use Money\Money;
 
 class Transaction extends Model
 {
     protected $casts = [
         'performed_at' => 'datetime',
         'type' => TransactionType::class,
-        'market_price_per_unit' => 'decimal:4',
-        'amount_paid_per_unit' => 'decimal:4',
+        'quantity' => QuantityCast::class,
+        'market_price_per_unit' => MoneyCast::class,
+        'amount_paid_per_unit' => MoneyCast::class,
     ];
 
     public function account(): BelongsTo
@@ -35,14 +38,14 @@ class Transaction extends Model
 
     public static function register(
         TransactionType $type,
-        float $amountPaidPerUnit,
-        int $quantity,
+        Money $amountPaidPerUnit,
+        Quantity $quantity,
         Position $position,
     ): Transaction {
         return self::create([
             'quantity' => $quantity,
             'type' => $type,
-            'market_price_per_unit' => (int) $position->asset->current_price->getAmount() / 100,
+            'market_price_per_unit' => $position->asset->current_price,
             'amount_paid_per_unit' => $amountPaidPerUnit,
             'performed_at' => now(),
             'position_id' => $position->id,
@@ -63,14 +66,14 @@ class Transaction extends Model
 
     public function relativeQuantity(): int
     {
-        return $this->isSell() ? -1 * $this->quantity : $this->quantity;
+        return $this->isSell() ? -1 * $this->quantity->asFloat() : $this->quantity->asFloat();
     }
 
     public function total(): Money
     {
         $totalInCents = $this->amount_paid_per_unit * $this->quantity * 100;
 
-        return new Money($totalInCents, new Currency($this->currency));
+        return new Money($totalInCents);
     }
 
     public function marketValue(Money $currentPrice): Money

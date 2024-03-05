@@ -7,18 +7,17 @@ namespace Modules\Exchange;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-
-class MoneyCast implements CastsAttributes
+class CurrencyCast implements CastsAttributes
 {
-    public function get(Model $model, string $key, mixed $value, array $attributes): Money
+    public function get(Model $model, string $key, mixed $value, array $attributes): Quantity
     {
-        return new Money($value);
+        return new Quantity($value);
     }
 
     public function set(Model $model, string $key, mixed $value, array $attributes): string
     {
-        if (! $value instanceof Money) {
-            throw new \Exception($key. ' must be an instance of ' . Money::class);
+        if (! $value instanceof Quantity) {
+            throw new \Exception('Price must be an instance of Quantity.');
         }
 
         return (string) $value;

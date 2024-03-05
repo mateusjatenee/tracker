@@ -5,7 +5,7 @@ namespace Modules\Exchange\database\factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Exchange\Asset\Asset;
 use Modules\Exchange\Asset\AssetType;
-use Money\Money;
+use Modules\Exchange\Money;
 
 class AssetFactory extends Factory
 {
