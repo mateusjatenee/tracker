@@ -21,7 +21,7 @@ class AssetTest extends TestCase
         ]);
 
         $this->assertInstanceOf(Money::class, $asset->current_price);
-        $this->assertEquals(10.0, $asset->current_price->asFloat());
+        $this->assertEquals(10.0, $asset->current_price->toFloat());
     }
 
     #[Test]
@@ -32,7 +32,7 @@ class AssetTest extends TestCase
             Money::USD(20),
         );
 
-        $this->assertEquals(20.0, $asset->fresh()->current_price->asFloat());
-        $this->assertEquals(20.0, $asset->prices()->latest('id')->first()->price->asFloat());
+        $this->assertEquals(20.0, $asset->fresh()->current_price->toFloat());
+        $this->assertEquals(20.0, $asset->prices()->latest('id')->first()->price->toFloat());
     }
 }

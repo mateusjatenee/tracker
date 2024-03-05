@@ -34,7 +34,7 @@ class PositionTest extends TestCase
 
         $position->buy(Quantity::make(10), Money::USD(5));
 
-        $this->assertEquals(10, (int) $position->currentDetails->quantity->asFloat());
+        $this->assertEquals(10, (int) $position->currentDetails->quantity->toFloat());
         $this->assertEquals((10 - 5 ) * 10, (int) $position->currentDetails->profit);
 
         $position->sell(Quantity::make(5), Money::USD(10));

@@ -6,7 +6,7 @@ namespace Modules\Exchange;
 
 use Brick\Math\BigDecimal;
 
-final readonly class Quantity
+final readonly class Quantity implements DecimalValue
 {
     public const SCALE = 8;
 
@@ -33,21 +33,21 @@ final readonly class Quantity
         return new Quantity($value);
     }
 
-    public function asFloat(): float
+    public function toFloat(): float
     {
         return $this->value->toFloat();
     }
 
-    public function subtract(Quantity|float $quantity):Quantity
+    public function subtract(DecimalValue|float $quantity):Quantity
     {
-        $amount = $quantity instanceof self ? $quantity->asFloat() : $quantity;
+        $amount = $quantity instanceof DecimalValue ? $quantity->toFloat() : $quantity;
 
         return new self($this->value->minus($amount));
     }
 
-    public function multiply(Quantity|float $quantity):Quantity
+    public function multiply(DecimalValue|float $quantity):Quantity
     {
-        $amount = $quantity instanceof self ? $quantity->asFloat() : $quantity;
+        $amount = $quantity instanceof DecimalValue ? $quantity->toFloat() : $quantity;
 
         return new self($this->value->multipliedBy($amount));
     }

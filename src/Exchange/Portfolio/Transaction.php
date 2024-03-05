@@ -66,7 +66,7 @@ class Transaction extends Model
 
     public function relativeQuantity(): int
     {
-        return $this->isSell() ? -1 * $this->quantity->asFloat() : $this->quantity->asFloat();
+        return $this->isSell() ? -1 * $this->quantity->toFloat() : $this->quantity->toFloat();
     }
 
     public function total(): Money
