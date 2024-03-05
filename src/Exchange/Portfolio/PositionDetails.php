@@ -31,10 +31,12 @@ class PositionDetails extends Model
         $profit = $position->asset->current_price->subtract(
             $position->averagePrice()
         )->multiply($position->currentQuantity());
-        
+        $quantity = $position->currentQuantity();
+        $averagePrice = $position->averagePrice();
+
         self::create([
-            'quantity' => Quantity::make($position->transactions->sum(fn (Transaction $t) => $t->quantity->toFloat())),
-            'average_price' => Money::USD($position->transactions->avg(fn (Transaction $t) => $t->amount_paid_per_unit->toFloat())),
+            'quantity' => $quantity,
+            'average_price' => $averagePrice,
             'current_market_price' => $position->asset->current_price,
             'profit' => $profit,
             'currency' => $position->asset->currency,
