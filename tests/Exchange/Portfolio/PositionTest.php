@@ -21,7 +21,7 @@ class PositionTest extends TestCase
 
         $position->buy(Quantity::make(10), Money::USD(5));
 
-        $this->assertEquals(Money::USD(5000), $position->totalInvested());
+        $this->assertEquals(Money::USD(50), $position->totalInvested());
         $this->assertEquals($asset->current_price->multiply(10), $position->marketValue());
     }
 
@@ -41,7 +41,7 @@ class PositionTest extends TestCase
 
         $position->refresh();
 
-        $this->assertEquals(Money::USD(2500), $position->totalInvested());
+        $this->assertEquals(Money::USD(25), $position->totalInvested());
         $this->assertEquals($asset->current_price->multiply(5), $position->marketValue());
     }
 

@@ -65,26 +65,30 @@ class Position extends Model
         return $this->addTransaction($quantity, $amountPaidPerUnit, TransactionType::Sell);
     }
 
-    public function averagePrice(): float
+    public function averagePrice(): Money
     {
-        return $this->transactions->filter(
-            fn (Transaction $transaction) => $transaction->isBuy()
-        )->avg(fn (Transaction $t) => $t->amount_paid_per_unit->asFloat());
+        return Money::USD(
+            $this->transactions()
+            ->where('type', TransactionType::Buy)
+            ->avg('amount_paid_per_unit')
+        );
     }
 
-    public function currentQuantity(): int
+    public function currentQuantity(): Quantity
     {
-        return $this->transactions->sum(fn (Transaction $transaction) => $transaction->relativeQuantity());
+        return Quantity::make(
+            $this->transactions->sum(fn (Transaction $transaction) => $transaction->relativeQuantity())
+        );
     }
 
     public function totalInvested(): Money
     {
-        return Money::USD((int) ($this->currentQuantity() * $this->averagePrice() * 100));
+        return Money::USD(($this->currentQuantity()->asFloat() * $this->averagePrice()->asFloat()));
     }
 
     public function marketValue(): Money
     {
-        return $this->asset->current_price->multiply($this->currentQuantity());
+        return $this->asset->current_price->multiply($this->currentQuantity()->asFloat());
     }
 }
 

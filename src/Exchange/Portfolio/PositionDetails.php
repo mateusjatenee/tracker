@@ -28,11 +28,11 @@ class PositionDetails extends Model
 
     public static function calculate(Position $position): void
     {
-        $profit = (
-            $position->asset->current_price->subtract(
-                $position->transactions->avg(fn (Transaction $t) => $t->amount_paid_per_unit->asFloat())
-            )
-        )->asFloat() * $position->transactions->sum(fn (Transaction $t) => $t->quantity->asFloat());
+        $profitPerUnit = $position->asset->current_price->subtract(
+            $position->averagePrice()
+        );
+        $quantity = $position->currentQuantity();
+        $profit = $profitPerUnit->multiply($quantity->asFloat());
 
 
         self::create([
