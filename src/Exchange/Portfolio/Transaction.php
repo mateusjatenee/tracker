@@ -9,7 +9,6 @@ use Modules\Exchange\Money;
 use Modules\Exchange\MoneyCast;
 use Modules\Exchange\Quantity;
 use Modules\Exchange\QuantityCast;
-use Money\Currency;
 
 class Transaction extends Model
 {

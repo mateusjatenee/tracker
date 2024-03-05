@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Modules\Exchange\Asset\Asset;
-use Modules\Exchange\Quantity;
 use Modules\Exchange\Money;
+use Modules\Exchange\Quantity;
 
 class Account extends Model
 {

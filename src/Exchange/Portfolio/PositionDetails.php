@@ -5,9 +5,7 @@ namespace Modules\Exchange\Portfolio;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Modules\Exchange\Money;
 use Modules\Exchange\MoneyCast;
-use Modules\Exchange\Quantity;
 use Modules\Exchange\QuantityCast;
 
 class PositionDetails extends Model

@@ -13,7 +13,7 @@ use Modules\Exchange\Quantity;
 class Position extends Model
 {
     protected $with = [
-            'details',
+        'details',
     ];
 
     public function asset(): BelongsTo
@@ -69,8 +69,8 @@ class Position extends Model
     {
         return Money::USD(
             $this->transactions()
-            ->where('type', TransactionType::Buy)
-            ->avg('amount_paid_per_unit')
+                ->where('type', TransactionType::Buy)
+                ->avg('amount_paid_per_unit')
         );
     }
 
@@ -91,4 +91,3 @@ class Position extends Model
         return $this->asset->current_price->multiply($this->currentQuantity());
     }
 }
-

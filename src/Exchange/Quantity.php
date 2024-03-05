@@ -16,8 +16,6 @@ final readonly class Quantity implements DecimalValue
      * A Quantity VO receives a decimal value and normalizes it to a BigDecimal object.
      * This is needed because Crypto currencies can be negotiated in tiny quantities, such as
      * 0.00000001 BTC, and we need to ensure that the precision is kept. Stocks are simpler.
-     *
-     * @param  \Brick\Math\BigDecimal|float|int|string  $value
      */
     public function __construct(BigDecimal|float|int|string $value)
     {
@@ -38,14 +36,14 @@ final readonly class Quantity implements DecimalValue
         return $this->value->toFloat();
     }
 
-    public function subtract(DecimalValue|float $quantity):Quantity
+    public function subtract(DecimalValue|float $quantity): Quantity
     {
         $amount = $quantity instanceof DecimalValue ? $quantity->toFloat() : $quantity;
 
         return new self($this->value->minus($amount));
     }
 
-    public function multiply(DecimalValue|float $quantity):Quantity
+    public function multiply(DecimalValue|float $quantity): Quantity
     {
         $amount = $quantity instanceof DecimalValue ? $quantity->toFloat() : $quantity;
 
