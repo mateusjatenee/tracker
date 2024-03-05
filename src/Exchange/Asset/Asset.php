@@ -5,8 +5,8 @@ namespace Modules\Exchange\Asset;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\Exchange\Money;
 use Modules\Exchange\MoneyCast;
-use Money\Money;
 
 class Asset extends Model
 {
